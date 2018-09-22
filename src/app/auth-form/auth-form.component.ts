@@ -1,8 +1,9 @@
-import { Component, Output, EventEmitter, AfterContentInit, ContentChild, ContentChildren, QueryList, ViewChild, AfterViewInit } from '@angular/core';
+import { Component, Output, EventEmitter, AfterContentInit, ContentChildren, QueryList, ViewChild, AfterViewInit } from '@angular/core';
 
 import { User } from './auth-form.interface';
 import { AuthRememberComponent } from './auth-remember.component';
 import { AuthMessageComponent } from './auth-message.component';
+import { SendInfoService } from '../subject/send-info.service';
 
 @Component({
   selector: 'auth-form',
@@ -28,6 +29,8 @@ import { AuthMessageComponent } from './auth-message.component';
   `
 })
 export class AuthFormComponent  implements AfterContentInit, AfterViewInit {
+
+  constructor(private sendInfos: SendInfoService) {}
   showMessage: boolean;
 
   // @ContentChild(AuthRememberComponent) remember: AuthRememberComponent;
@@ -67,6 +70,7 @@ export class AuthFormComponent  implements AfterContentInit, AfterViewInit {
 
   onSubmit(value: User) {
     this.submitted.emit(value);
+    this.sendInfos.sendInfos(value);
   }
 
 }
