@@ -1,4 +1,4 @@
-import { Component, Output, EventEmitter, AfterContentInit, ContentChildren, QueryList, ViewChild, AfterViewInit } from '@angular/core';
+import { Component, Output, EventEmitter, AfterContentInit, ContentChildren, QueryList, ViewChild, AfterViewInit, ViewChildren, ChangeDetectorRef } from '@angular/core';
 
 import { User } from './auth-form.interface';
 import { AuthRememberComponent } from './auth-remember.component';
@@ -23,6 +23,12 @@ import { SendInfoService } from '../subject/send-info.service';
         <auth-message
         [style.display]="(showMessage ? 'inherit' : 'none')">
       </auth-message>
+      <auth-message
+        [style.display]="(showMessage ? 'inherit' : 'none')">
+      </auth-message>
+      <auth-message
+        [style.display]="(showMessage ? 'inherit' : 'none')">
+      </auth-message>
         <ng-content select="button"></ng-content>
       </form>
     </div>
@@ -30,26 +36,34 @@ import { SendInfoService } from '../subject/send-info.service';
 })
 export class AuthFormComponent  implements AfterContentInit, AfterViewInit {
 
-  constructor(private sendInfos: SendInfoService) {}
+  constructor(
+    private sendInfos: SendInfoService,
+    private cd: ChangeDetectorRef
+  ) { }
   showMessage: boolean;
 
   // @ContentChild(AuthRememberComponent) remember: AuthRememberComponent;
-  @ViewChild(AuthMessageComponent) message: AuthMessageComponent;
+  // @ViewChild(AuthMessageComponent) message:AuthMessageComponent;
+  @ViewChildren(AuthMessageComponent) message: QueryList<AuthMessageComponent>;
   @ContentChildren(AuthRememberComponent) remember: QueryList<AuthRememberComponent>;
   @Output() submitted: EventEmitter<User> = new EventEmitter<User>();
 
 
   ngAfterViewInit() {
     console.log(this.message);
-     // Se eu mudar o days do AuthMessageComponent aqui, me gera um exception,
-     // Devo fazer a mudanca no ngAfterContentInit, conforme exemplo!
-    // this.message.days = 30;
+
+    if (this.message) {
+ 
+      this.message.forEach((message ) => {
+        message.days = 30;
+      });
+      // se usar aqui, pra nao dar erro preciso usar o detectChanges!
+      this.cd.detectChanges();
+    }
   }
 
   ngAfterContentInit() {
-    if (this.message) {
-      this.message.days = 30;
-    }
+ 
     if (this.remember) {
 
       // CHILD
