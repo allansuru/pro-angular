@@ -9,7 +9,7 @@ import { SendInfoService } from './subject/send-info.service';
     <div>
       <auth-form
         (submitted)="createUser($event)">
-        <h3>Create account 2</h3>
+        <h3>Create account </h3>
         <button type="submit">
         Join us
       </button>
