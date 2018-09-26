@@ -7,11 +7,13 @@ import { User } from './auth-form/auth-form.interface';
 @Component({
   selector: 'app-root',
   template: `
-  
-  <button (click)="destroyComponent()">
-  Destroy!
-</button>
-    <div>
+  <div>
+      <button (click)="destroyComponent()">
+        Destroy
+      </button>
+      <button (click)="moveComponent()">
+        Move
+      </button>
       <div #entry></div>
     </div>
   `
@@ -26,11 +28,12 @@ export class AppComponent implements AfterContentInit {
   ) {}
 
   ngAfterContentInit() {
+    debugger
     const authFormFactory = this.resolver.resolveComponentFactory(AuthFormComponent);
-    this.component = this.entry.createComponent(authFormFactory);
-    console.log(this.component.instance);
-    this.component.instance.title = 'Create Account';
-    this.component.instance.submitted.subscribe((user: User) =>   this.loginUser(user));
+    this.entry.createComponent(authFormFactory);
+    this.component = this.entry.createComponent(authFormFactory, 0);
+    this.component.instance.title = 'Create account';
+    this.component.instance.submitted.subscribe(this.loginUser);
     // const component2 = this.entry.createComponent(authFormFactory);
     // const component3 = this.entry.createComponent(authFormFactory);
     // const component4 = this.entry.createComponent(authFormFactory);
@@ -43,6 +46,12 @@ export class AppComponent implements AfterContentInit {
 
   loginUser(user: User) {
     console.log('Login', user);
+  }
+
+
+  moveComponent() {
+    debugger
+    this.entry.move(this.component.hostView, 1);
   }
 
 }
