@@ -21,6 +21,9 @@ import { SendInfoService } from '../subject/send-info.service';
     AuthFormComponent,
     AuthRememberComponent
   ],
+  entryComponents: [
+    AuthFormComponent
+  ],
   providers: [
     SendInfoService
   ]

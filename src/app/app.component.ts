@@ -1,69 +1,48 @@
-import { Component } from '@angular/core';
+import { Component, ViewContainerRef, ViewChild, AfterContentInit, ComponentFactoryResolver, ComponentRef } from '@angular/core';
+
+import { AuthFormComponent } from './auth-form/auth-form.component';
 
 import { User } from './auth-form/auth-form.interface';
-import { SendInfoService } from './subject/send-info.service';
 
 @Component({
   selector: 'app-root',
   template: `
+  
+  <button (click)="destroyComponent()">
+  Destroy!
+</button>
     <div>
-      <auth-form
-        (submitted)="createUser($event)">
-        <h3>Create account </h3>
-        <button type="submit">
-        Join us
-      </button>
-      </auth-form>
-      <auth-form
-        (submitted)="loginUser($event)">
-        <h3>Login</h3>
-        <auth-remember (checked)="rememberUser($event)"></auth-remember>
-        <button type="submit">
-        Login
-      </button>
-      </auth-form>
-  </div>
-
+      <div #entry></div>
+    </div>
   `
 })
-export class AppComponent {
-  constructor(private getInfos: SendInfoService) {
+export class AppComponent implements AfterContentInit {
 
-    this.getInfos.getInfos().subscribe(infos => {
-      this.verificaExistente(infos);
-      this.lstInfos.push(infos);
-      console.log('lista de logins consolidada: ', this.lstInfos);
-    });
+  @ViewChild('entry', { read: ViewContainerRef }) entry: ViewContainerRef;
+  component: ComponentRef<AuthFormComponent>;
+
+  constructor(
+    private resolver: ComponentFactoryResolver
+  ) {}
+
+  ngAfterContentInit() {
+    const authFormFactory = this.resolver.resolveComponentFactory(AuthFormComponent);
+    this.component = this.entry.createComponent(authFormFactory);
+    console.log(this.component.instance);
+    this.component.instance.title = 'Create Account';
+    this.component.instance.submitted.subscribe((user: User) =>   this.loginUser(user));
+    // const component2 = this.entry.createComponent(authFormFactory);
+    // const component3 = this.entry.createComponent(authFormFactory);
+    // const component4 = this.entry.createComponent(authFormFactory);
   }
 
-  // tslint:disable-next-line:no-inferrable-types
-  rememberMe: boolean = false;
-  lstInfos: any[] = [];
-
-  createUser(user: User) {
-    console.log('Create account', user);
+  destroyComponent() {
+    console.log(this.component);
+    this.component.destroy();
   }
 
   loginUser(user: User) {
-    console.log('Login', user, this.rememberMe);
-  }
-  rememberUser(remember: boolean) {
-    this.rememberMe = remember;
+    console.log('Login', user);
   }
 
-  verificaExistente(daVez) {
-    let index = null;
-    if (this.lstInfos.length > 0) {
-   this.lstInfos.map((item, i) => {
-           if (item.infos.email === daVez.infos.email ) {
-              index = i;
-           }
-        });
-
-        if (index !== null) {
-          this.lstInfos.splice(index, 1);
-          index = null;
-        }
-    }
-  }
 }
