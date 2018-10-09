@@ -9,6 +9,7 @@ import { FormGroup, FormArray } from '@angular/forms';
       <div formArrayName="stock">
         <div
           *ngFor="let item of stocks; let i = index;">
+          
           <div class="stock-product__content" [formGroupName]="i">
             <div class="stock-product__name">
               {{ item.value.product_id }}
@@ -19,7 +20,9 @@ import { FormGroup, FormArray } from '@angular/forms';
               min="10"
               max="1000"
               formControlName="quantity">
-            <button type="button" (click)="onRemove(item, i)">
+            <button 
+              type="button"
+              (click)="onRemove(item, i)">
               Remove
             </button>
           </div>
@@ -33,18 +36,15 @@ export class StockProductsComponent {
   @Input()
   parent: FormGroup;
 
+  @Output()
+  removed = new EventEmitter<any>();
+
+  onRemove(group, index) {
+    this.removed.emit({ group, index });
+  }
+
   get stocks() {
     return (this.parent.get('stock') as FormArray).controls;
   }
-
-  @Output()
-  remove = new EventEmitter<any>();
-
-  onRemove(group, index) {
-    console.log('no emmit: ', group, index);
-    
-    this.remove.emit({  group, index });
-  }
-  
 
 }
