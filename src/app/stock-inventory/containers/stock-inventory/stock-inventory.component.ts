@@ -16,11 +16,13 @@ import { Product } from '../../models/product.interface';
 
         <stock-selector
           [parent]="form"
-          [products]="products">
+          [products]="products"
+          (added)="addStock($event)">
         </stock-selector>
 
         <stock-products
-          [parent]="form">
+          [parent]="form"
+          (remove)="removeStock($event)">
         </stock-products>
 
         <div class="stock-inventory__buttons">
@@ -56,7 +58,6 @@ export class StockInventoryComponent {
     stock: new FormArray([
       this.createStock({ product_id: 1, quantity: 10 }),
       this.createStock({ product_id: 3, quantity: 50 }),
-      this.createStock({ product_id: 66, quantity: 150 }),
     ])
   })
 
@@ -66,6 +67,17 @@ export class StockInventoryComponent {
       quantity: new FormControl(stock.quantity || 10)
     });
   }
+
+  addStock(stock) {
+    const control = this.form.get('stock') as FormArray;
+    control.push(this.createStock(stock));
+  }
+
+  removeStock({ group, index }: { group: FormGroup, index: number }) {
+    const control = this.form.get('stock') as FormArray;
+    control.removeAt(index);
+  }
+
 
   onSubmit() {
     console.log('Submit:', this.form.value);
