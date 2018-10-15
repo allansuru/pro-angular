@@ -88,17 +88,13 @@ export class StockInventoryComponent implements OnInit {
 
         this.calculateTotal(this.form.get('stock').value);
         this.form.get('stock')
-          .valueChanges.subscribe(value => {
-            console.log('ValuesChange: ', value);
-            this.calculateTotal(value);
-          });
+          .valueChanges.subscribe(value => this.calculateTotal(value));
 
       });
 
   }
 
   calculateTotal(value: Item[]) {
-  
     const total = value.reduce((prev, next) => {
       return prev + (next.quantity * this.productMap.get(next.product_id).price);
     }, 0);

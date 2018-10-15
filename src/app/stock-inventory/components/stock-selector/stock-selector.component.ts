@@ -43,8 +43,10 @@ export class StockSelectorComponent {
   added = new EventEmitter<any>();
 
   onAdd() {
-    console.log('Add: ', this.parent.get('selector').value);
-    
     this.added.emit(this.parent.get('selector').value);
+    this.parent.get('selector').reset({
+      product_id: '',
+      quantity: 10
+    });
   }
 }
