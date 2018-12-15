@@ -10,10 +10,20 @@ interface Drink {
   price: number
 }
 
+export function DrinkFactory(http) {
+  return new FoodService(http, 'http://localhost:3000/drinks');
+}
+
 @Component({
   selector: 'drink-viewer',
   providers: [
-    { provide: FoodService, useClass: FoodService }
+    {
+      provide: FoodService,
+      useFactory: DrinkFactory,
+      deps: [
+        Http
+      ]
+    }
   ],
   template: `
     <div>

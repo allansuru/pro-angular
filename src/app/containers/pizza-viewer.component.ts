@@ -10,10 +10,20 @@ interface Pizza {
   price: number
 }
 
+export function PizzaFactory(http) {
+  return new FoodService(http, 'http://localhost:3000/pizzas');
+}
+
 @Component({
   selector: 'pizza-viewer',
   providers: [
-    FoodService
+    {
+      provide: FoodService,
+      useFactory: PizzaFactory,
+      deps: [
+        Http
+      ]
+    }
   ],
   template: `
     <div>
