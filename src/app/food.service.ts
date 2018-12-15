@@ -7,13 +7,18 @@ import 'rxjs/add/operator/map';
 @Injectable()
 export class FoodService {
   constructor(
-    private http: Http,
-    private api: string
-  ) {
-    console.log(this.api);
+    private http: Http
+  ) {}
+  getSides(): Observable<any[]> {
+    return this.http.get('http://localhost:3000/sides')
+      .map(response => response.json());
   }
-  getFood(): Observable<any[]> {
-    return this.http.get(this.api)
+  getPizzas(): Observable<any[]> {
+    return this.http.get('http://localhost:3000/pizzas')
+      .map(response => response.json());
+  }
+  getDrinks(): Observable<any[]> {
+    return this.http.get('http://localhost:3000/drinks')
       .map(response => response.json());
   }
 }
