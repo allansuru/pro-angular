@@ -1,20 +1,29 @@
 import { NgModule } from '@angular/core';
+import { HttpModule } from '@angular/http';
 import { BrowserModule } from '@angular/platform-browser';
 
-import { StockInventoryModule } from './stock-inventory/stock-inventory.module';
+import { PizzaViewerComponent } from './containers/pizza-viewer.component';
+import { DrinkViewerComponent } from './containers/drink-viewer.component';
+import { SideViewerComponent } from './containers/side-viewer.component';
 
 import { AppComponent } from './app.component';
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    PizzaViewerComponent,
+    DrinkViewerComponent,
+    SideViewerComponent
   ],
   imports: [
     BrowserModule,
-    StockInventoryModule
+    HttpModule
   ],
   bootstrap: [
     AppComponent
+  ],
+  providers: [
+    { provide: 'api', useValue: 'http://localhost:3000/pizzas' }
   ]
 })
 export class AppModule {}
