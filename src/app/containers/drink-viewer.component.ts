@@ -10,8 +10,8 @@ interface Drink {
   price: number
 }
 
-export function DrinkFactory(http) {
-  return new FoodService(http, 'http://localhost:3000/drinks');
+export function DrinkFactory(http: Http) {
+  return new FoodService(http, `http://localhost:3000/drinks`);
 }
 
 @Component({
